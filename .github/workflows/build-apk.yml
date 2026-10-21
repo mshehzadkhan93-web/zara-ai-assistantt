@@ -28,13 +28,15 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Android APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: |
+          ./gradlew assembleDebug --no-daemon --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Zara-AI-Assistant.apk
 
       - name: Upload APK to Workflow Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Zara-AI-Assistant-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/Zara-AI-Assistant.apk
           if-no-files-found: error
 
       - name: Create GitHub Release with APK
@@ -48,9 +50,9 @@ jobs:
             Download the ready-to-install `.apk` directly to your Android mobile phone!
 
             **How to install on phone:**
-            1. Tap on `app-debug.apk` below to download.
-            2. Open the file on your phone and tap **Install** (allow unknown sources if prompted).
-            3. Enjoy Zara AI Assistant on your phone!
-          files: app/build/outputs/apk/debug/app-debug.apk
+            1. Tap on `Zara-AI-Assistant.apk` below to download.
+            2. Open the file on your phone and tap **Install** (allow install from this source if prompted).
+            3. Open Zara AI Assistant and enjoy!
+          files: app/build/outputs/apk/debug/Zara-AI-Assistant.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
