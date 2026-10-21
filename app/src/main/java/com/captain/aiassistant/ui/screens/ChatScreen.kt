@@ -16,11 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Flight
-import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,13 +38,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.captain.aiassistant.data.ChatMessage
 import com.captain.aiassistant.ui.components.AssistantAvatar
 import com.captain.aiassistant.ui.components.GradientButton
-import com.captain.aiassistant.ui.components.QuickActionChip
 import com.captain.aiassistant.ui.components.WhiteCard
 import com.captain.aiassistant.ui.theme.CardWhite
-import com.captain.aiassistant.ui.theme.ChipOrange
-import com.captain.aiassistant.ui.theme.ChipPink
-import com.captain.aiassistant.ui.theme.ChipPurple
-import com.captain.aiassistant.ui.theme.ChipTeal
 import com.captain.aiassistant.ui.theme.GradientBlue
 import com.captain.aiassistant.ui.theme.GradientPurple
 import com.captain.aiassistant.ui.theme.InkText
@@ -73,13 +63,13 @@ fun ChatScreen(
     }
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        // Cute avatar header, like the Design B mockup.
+        // Cute avatar header, matching Design B.
         Row(verticalAlignment = Alignment.CenterVertically) {
             AssistantAvatar()
             Spacer(modifier = Modifier.width(14.dp))
             Column {
                 Text(
-                    text = "Good morning!",
+                    text = "Zara AI Assistant",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -92,46 +82,7 @@ fun ChatScreen(
             }
         }
         Spacer(modifier = Modifier.height(14.dp))
-        // Colorful quick-action chips (only while the chat is empty).
-        if (viewModel.messages.isEmpty()) {
-            Text(
-                text = "Quick actions",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                QuickActionChip(
-                    text = "Brainstorm",
-                    icon = Icons.Filled.Lightbulb,
-                    color = ChipOrange,
-                    onClick = { viewModel.send("Brainstorm ideas", context) }
-                )
-                QuickActionChip(
-                    text = "Write Email",
-                    icon = Icons.Filled.Email,
-                    color = ChipTeal,
-                    onClick = { viewModel.send("Write an email", context) }
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                QuickActionChip(
-                    text = "Plan Trip",
-                    icon = Icons.Filled.Flight,
-                    color = ChipPurple,
-                    onClick = { viewModel.send("Plan a trip", context) }
-                )
-                QuickActionChip(
-                    text = "Explain",
-                    icon = Icons.Filled.Edit,
-                    color = ChipPink,
-                    onClick = { viewModel.send("Explain a concept", context) }
-                )
-            }
-            Spacer(modifier = Modifier.height(14.dp))
-        }
+
         LazyColumn(
             state = listState,
             modifier = Modifier.weight(1f),
@@ -166,7 +117,7 @@ fun ChatScreen(
             TextField(
                 value = input,
                 onValueChange = { input = it },
-                placeholder = { Text("Ask anything... or 'open YouTube'") },
+                placeholder = { Text("Ask Zara anything... or 'open YouTube'") },
                 modifier = Modifier.weight(1f),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
@@ -184,8 +135,10 @@ fun ChatScreen(
                 text = "Send",
                 enabled = !viewModel.isLoading,
                 onClick = {
-                    viewModel.send(input, context)
-                    input = ""
+                    if (input.isNotBlank()) {
+                        viewModel.send(input, context)
+                        input = ""
+                    }
                 }
             )
         }
